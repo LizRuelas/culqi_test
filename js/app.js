@@ -22,22 +22,23 @@
               // Imprimir Token
               $.ajax({
                  type: 'POST',
-                 url: 'http://localhost/culqi-test/test/culqi-test.php',
+                 url: 'test/culqi-test.php',
                  data: { token: Culqi.token.id, installments: Culqi.token.metadata.installments },
                  datatype: 'json',
                  success: function(data) {
-                   var result = "";
+
+                   var result;
+
                    if(data.constructor == String){
-                       result = JSON.parse(data);
-                   }
-                   if(data.constructor == Object){
+                       result = JSON.parse(JSON.parse(data));
+                   } else if(data.constructor == Object){
                        result = JSON.parse(JSON.stringify(data));
                    }
+
                    if(result.object === 'charge'){
-                    resultdiv(result.outcome.user_message);
-                   }
-                   if(result.object === 'error'){
-                       resultdiv(result.user_message);
+                     resultdiv(result.outcome.user_message);
+                   } else if(result.object == 'error'){
+                     resultdiv(result.user_message);
                    }
                  },
                  error: function(error) {
@@ -63,5 +64,5 @@
         function resultdiv(message){
           $('#response-panel').show();
           $('#response').html(message);
-          $('body').waitMe('hide');
+          $('body').waitMe("hide");
         }

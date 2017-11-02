@@ -1,14 +1,17 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+
+$tokenRecep = $_POST['token'];
 
 define("secret_key", "sk_test_MC8mbT7XkJ4qRi6n");
-function createCharge(){
+
+function createCharge($token){
   $data = json_encode([
       'amount' => '10000',
       'currency_code' => 'PEN',
       'email' => 'richard@culqi.com',
-      'source_id' => 'tkn_test_dXxO90rzMemjXTgu'
+      'source_id' => $token
   ]);
   $url = "https://api.culqi.com/v2/charges";
   $ch = curl_init($url);
@@ -21,11 +24,14 @@ function createCharge(){
   );
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   $result = curl_exec($ch);
+
   curl_close($ch);
-  $gist = json_decode($result, true);
-  if($gist) {
-    return   print_r($gist);
-  }
+
+  echo json_encode($result);
+
+  // if($charge) {
+  //   echo $charge;
+  // }
 }
-createCharge('tkn_test_dXxO90rzMemjXTgu');
+createCharge($tokenRecep);
 ?>
